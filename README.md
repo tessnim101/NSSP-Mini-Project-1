@@ -1,88 +1,35 @@
 ﻿# NSSP-Mini-Project-1
 
-This repository contains a complete pipeline for preprocessing, statistical analysis, and clustering of fMRI data. The workflow is organized into three Jupyter notebooks, each covering a key stage of the analysis.
+This repository contains a complete pipeline for preprocessing, statistical analysis, and clustering of fMRI data. The workflow is organized into three Jupyter notebooks, each covering a stage of the analysis.
 
-## 📁 Repository Structure
-├── 01_preprocessing.ipynb # Structural & functional preprocessing
-├── 02_glm.ipynb # GLM analysis and contrast computation
-├── 03_kmeans.ipynb # Clustering analysis
-└── README.md
+## Pipeline Description
 
----
+**Preprocessing (`01_preprocessing.ipynb`)**  
+Includes structural and functional preprocessing steps: skull stripping (FSL BET), tissue segmentation (FSL FAST), motion correction, co-registration of functional to anatomical images (EPI→T1), normalization, and spatial smoothing. The outputs of this stage are used in all subsequent analyses.
 
-## ⚙️ Pipeline Overview
+**GLM Analysis (`02_glm.ipynb`)**  
+Implements a voxel-wise General Linear Model using experimental event timings. The notebook constructs a design matrix, fits the model to the BOLD signal, and computes statistical contrasts, including a comparison between hand and foot motor conditions. Results are visualized as statistical maps over anatomical references.
 
-### 1. Preprocessing (`01_preprocessing.ipynb`)
+**Clustering (`03_kmeans.ipynb`)**  
+Applies K-means clustering to preprocessed fMRI data within a brain mask. The number of clusters is determined using standard evaluation metrics (silhouette score, Calinski–Harabasz index, Davies–Bouldin index, and elbow method), leading to an optimal solution of *k = 2*. Cluster centroids and similarity measures are analyzed for interpretation.
 
-Performs structural and functional preprocessing:
+## Requirements
 
-- **Structural preprocessing**
-  - Skull stripping (FSL BET)
-  - Tissue segmentation (FSL FAST)
-
-- **Functional preprocessing**
-  - Load fMRI data
-  - Variance normalization
-  - Concatenate runs
-  - Motion correction
-  - Co-registration (EPI → anatomical using `epi_reg`)
-  - Gaussian smoothing
-
-**Notes:**
-- A middle volume (e.g., scan 250) is used as a reference
-- White matter segmentation improves alignment
-
----
-
-### 2. GLM Analysis (`02_glm.ipynb`)
-
-Implements a General Linear Model (GLM):
-
-- Load preprocessed BOLD data
-- Extract TR (repetition time)
-- Load event timings
-- Build design matrix
-- Fit GLM
-- Compute contrasts
-
-**Main contrast:**
-- Hand vs Foot (left/right hand vs left/right foot)
-
-**Output:**
-- Statistical maps with anatomical overlay (AAL atlas)
-
----
-
-### 3. Clustering (`03_kmeans.ipynb`)
-
-Applies unsupervised learning (K-means):
-
-- Apply brain mask
-- Evaluate optimal clusters using:
-  - Silhouette Score
-  - Calinski-Harabasz Index
-  - Davies-Bouldin Index
-  - Elbow method
-
-**Result:**
-- Optimal number of clusters: `k = 2`
-
-Additional:
-- Visualization of cluster centroids
-- Pearson correlation similarity analysis
-
----
-
-## 🧰 Requirements
-
-- Python 3.x
-- numpy
-- scipy
-- matplotlib
-- nibabel
-- nilearn
-- scikit-learn
+- Python 3.x  
+- `numpy`, `scipy`, `matplotlib`  
+- `nibabel`, `nilearn`, `scikit-learn`  
 - FSL (BET, FAST, epi_reg)
 
+## Usage
 
-   jupyter notebook
+Run the notebooks in order:
+
+1. `01_preprocessing.ipynb`  
+2. `02_glm.ipynb`  
+3. `03_kmeans.ipynb`
+
+Ensure that FSL is properly installed and environment variables are configured. File paths may need to be adapted to your system.
+
+## License
+
+This project is intended for academic use.
